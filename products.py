@@ -12,8 +12,6 @@ def show_products():
 
 
 def test_product_branch():
-    print("This code was added from feature-product-page")
+    print("This code was added from feature-catalogue-page")
 
 
-def show_products():
-    print("Product Page Version 2")
