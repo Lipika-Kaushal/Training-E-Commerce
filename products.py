@@ -6,3 +6,14 @@ def get_products():
     data=cur.fetchall()
     con.close()
     return data
+
+def show_products():
+    print("Product Page Version 1")
+
+
+def test_product_branch():
+    print("This code was added from feature-product-page")
+
+
+def show_products():
+    print("Product Page Version 2")
