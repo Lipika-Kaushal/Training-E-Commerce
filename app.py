@@ -17,6 +17,8 @@ from flask import (
 from database import DATABASE_PATH, initialize_database
 
 
+initialize_database()
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or secrets.token_hex(32)
 app.config["SESSION_COOKIE_HTTPONLY"] = True

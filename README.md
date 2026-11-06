@@ -2,7 +2,7 @@
 
 ## Run the web storefront
 
-Install the web dependency, then start the local storefront from the project folder:
+Install the web dependencies, then start the local storefront from the project folder:
 
 ```powershell
 python -m pip install -r requirements.txt
@@ -20,3 +20,24 @@ The SQLite database is `ecommerce.db` in the project folder. Startup creates the
 required tables and adds any missing demo accounts and products without deleting
 existing records. For a deployment beyond local development, set a persistent,
 random `FLASK_SECRET_KEY` environment variable before starting the app.
+
+## Deploy to Azure App Service (Linux)
+
+Use a Python App Service and deploy the repository root. Set these **App
+Settings** in the Azure portal:
+
+- `SCM_DO_BUILD_DURING_DEPLOYMENT` = `true`
+- `FLASK_SECRET_KEY` = a long, random value kept private
+- `DATABASE_PATH` = `/home/data/ecommerce.db`
+
+In **Configuration → General settings → Startup Command**, set:
+
+```text
+gunicorn --bind=0.0.0.0 --timeout 600 app:app
+```
+
+The WSGI app initializes the database when it is loaded by Gunicorn. The
+database path setting keeps SQLite data under App Service's persistent `/home`
+storage rather than the deployed application files. SQLite is suitable for a
+small, single-instance demo; use a managed database for multi-instance
+production deployments.

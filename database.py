@@ -1,12 +1,20 @@
+import os
 import sqlite3
 from contextlib import closing
 from pathlib import Path
 
 
-DATABASE_PATH = Path(__file__).resolve().with_name("ecommerce.db")
+DATABASE_PATH = Path(
+    os.environ.get(
+        "DATABASE_PATH",
+        str(Path(__file__).resolve().with_name("ecommerce.db")),
+    )
+).expanduser()
 
 
 def initialize_database():
+    DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
+
     users = [
         ("u1", "p123"),
         ("u2", "p123"),
