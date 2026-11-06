@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Order confirmed{% endblock %}
+{% block content %}
+<section class="confirmation">
+  <div class="confirmation-mark">✓</div>
+  <p class="eyebrow"><span class="eyebrow-line"></span> ORDER RECEIVED</p>
+  <h1>Good choice.<br><em>Very good choice.</em></h1>
+  <p class="confirmation-copy">Your order is in. Thanks for choosing things made for everyday.</p>
+  <div class="receipt">
+    <div class="receipt-heading"><span>YOUR ORDER</span><span>{{ items|length }} {{ 'ITEM' if items|length == 1 else 'ITEMS' }}</span></div>
+    {% for item in items %}
+    <div class="summary-row"><span>{{ item.name }} <small>× {{ item.quantity }}</small></span><span>{{ item.subtotal|inr }}</span></div>
+    {% endfor %}
+    <div class="summary-row"><span>Delivery</span><span>{{ 'Complimentary' if shipping == 0 else shipping|inr }}</span></div>
+    <div class="summary-total"><span>Total paid</span><strong>{{ grand_total|inr }}</strong></div>
+  </div>
+  <a class="button button-primary" href="{{ url_for('shop') }}">Back to the collection <span aria-hidden="true">↗</span></a>
+</section>
+{% endblock %}

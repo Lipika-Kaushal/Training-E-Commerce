@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+<section class="login-layout">
+  <div class="login-copy">
+    <p class="eyebrow"><span class="eyebrow-line"></span> A LITTLE MORE INTENTIONAL</p>
+    <h1>Good things,<br><em>well chosen.</em></h1>
+    <p class="login-description">Useful objects. Beautifully considered. Find your next everyday favourite in our edit of modern essentials.</p>
+    <div class="login-proof"><span class="proof-icon">✳</span><span>Made for everyday,<br>chosen to last.</span></div>
+  </div>
+  <div class="login-card">
+    <div class="card-index">01 <span>—</span> YOUR ACCOUNT</div>
+    <h2>Welcome back.</h2>
+    <p class="form-intro">Sign in to pick up where you left off.</p>
+    <form method="post" class="login-form">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" autocomplete="username" placeholder="Your username" required autofocus>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+      <button class="button button-primary button-full" type="submit">Sign in <span aria-hidden="true">↗</span></button>
+    </form>
+    <p class="login-note">New here? Ask your store administrator for an account.</p>
+    <div class="demo-hint">DEMO ACCOUNT <span>u1</span> / <span>p123</span></div>
+  </div>
+  <div class="login-orbit orbit-one"></div>
+  <div class="login-orbit orbit-two"></div>
+</section>
+{% endblock %}

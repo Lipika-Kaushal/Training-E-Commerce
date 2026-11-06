@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Your bag{% endblock %}
+{% block content %}
+<section class="page-intro">
+  <p class="eyebrow"><span class="eyebrow-line"></span> YOUR EDIT</p>
+  <h1>A few good <em>things.</em></h1>
+  <p>Everything you picked, all in one place.</p>
+</section>
+
+{% if items %}
+<section class="cart-layout">
+  <div class="cart-items">
+    {% for item in items %}
+    <article class="cart-item">
+      <div class="cart-item-art cart-art-{{ loop.index }}"><span>0{{ loop.index }}</span><b>{{ item.name }}</b></div>
+      <div class="cart-item-info">
+        <span class="cart-item-kicker">A BETTER KIND OF ESSENTIAL</span>
+        <h2>{{ item.name }}</h2>
+        <span class="cart-item-price">{{ item.price|inr }} <span>each</span></span>
+        <form method="post" action="{{ url_for('update_cart', product_id=item.id) }}" class="quantity-form">
+          <label for="quantity-{{ item.id }}">QTY</label>
+          <input id="quantity-{{ item.id }}" name="quantity" type="number" min="0" max="99" value="{{ item.quantity }}" required>
+          <button type="submit" class="text-button">Update</button>
+          <span class="remove-hint">Set to 0 to remove</span>
+        </form>
+      </div>
+      <strong class="item-subtotal">{{ item.subtotal|inr }}</strong>
+    </article>
+    {% endfor %}
+    <a class="continue-link" href="{{ url_for('shop') }}">← Keep exploring</a>
+  </div>
+  <aside class="order-summary">
+    <p class="eyebrow"><span class="eyebrow-line"></span> THE DETAILS</p>
+    <h2>Your total.</h2>
+    <div class="summary-row"><span>Subtotal</span><span>{{ total|inr }}</span></div>
+    <div class="summary-row"><span>Delivery</span><span>{{ 'Complimentary' if shipping == 0 else shipping|inr }}</span></div>
+    <div class="summary-note">{{ 'You have unlocked complimentary delivery.' if shipping == 0 else 'Complimentary delivery on orders over ₹50,000.' }}</div>
+    <div class="summary-total"><span>Total</span><strong>{{ grand_total|inr }}</strong></div>
+    <form method="post" action="{{ url_for('checkout') }}"><button class="button button-primary button-full" type="submit">Place your order <span aria-hidden="true">↗</span></button></form>
+    <p class="secure-note"><span>✳</span> A thoughtful choice. Thank you.</p>
+  </aside>
+</section>
+{% else %}
+<section class="empty-bag">
+  <div class="empty-bag-mark">f.</div>
+  <h2>Your bag is taking a breather.</h2>
+  <p>There are plenty of good things waiting to be found.</p>
+  <a class="button button-primary" href="{{ url_for('shop') }}">Browse the collection <span aria-hidden="true">↗</span></a>
+</section>
+{% endif %}
+{% endblock %}

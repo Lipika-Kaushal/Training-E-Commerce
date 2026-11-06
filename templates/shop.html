@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}The essentials edit{% endblock %}
+{% block content %}
+<section class="shop-hero">
+  <div class="hero-copy">
+    <p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> THE EVERYDAY EDIT · NO. 01</p>
+    <h1>Less, but<br><em>better.</em></h1>
+    <p>Thoughtful tools for work, play, and everything in between.</p>
+    <a href="#collection" class="button button-light">Explore the collection <span aria-hidden="true">↓</span></a>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <div class="hero-disc"></div>
+    <div class="hero-device"><div class="device-screen"></div><div class="device-base"></div></div>
+    <div class="hero-caption">OBJECTS FOR<br>REAL LIFE <span>✳</span></div>
+    <div class="hero-number">01</div>
+  </div>
+  <div class="hero-bottom"><span>DESIGNED TO DO MORE WITH LESS</span><span>SCROLL TO DISCOVER ↓</span></div>
+</section>
+
+<section class="collection-section" id="collection">
+  <div class="section-heading">
+    <div><p class="eyebrow"><span class="eyebrow-line"></span> THE CONSIDERED COLLECTION</p><h2>Everyday, <em>reimagined.</em></h2></div>
+    <span class="collection-count">{{ products|length }} PIECES · 01—{{ '%02d'|format(products|length) }}</span>
+  </div>
+  {% if products %}
+  <div class="product-grid">
+    {% for product in products %}
+    <article class="product-card">
+      <div class="product-visual product-visual-{{ loop.index }}">
+        <span class="product-number">0{{ loop.index }}</span>
+        <span class="product-shape" aria-hidden="true"></span>
+        <span class="product-category">{{ ['WORK / PLAY', 'POCKET-SIZED', 'DESK OBJECT', 'DAILY DRIVER', 'SOUND GOODS'][(loop.index0) % 5] }}</span>
+        <span class="visual-word">{{ product[1] }}</span>
+      </div>
+      <div class="product-details">
+        <div><h3>{{ product[1] }}</h3><span class="product-subtitle">A better kind of essential</span></div>
+        <span class="product-price">{{ product[2]|inr }}</span>
+      </div>
+      <form method="post" action="{{ url_for('add_to_cart') }}" class="add-form">
+        <input type="hidden" name="product_id" value="{{ product[0] }}">
+        <button class="button button-add" type="submit"><span>Add to bag</span><span class="add-symbol">+</span></button>
+      </form>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state"><p>Our shelves are looking a little quiet.</p><span>Products will appear here when they are added to the catalogue.</span></div>
+  {% endif %}
+</section>
+
+<section class="promise-strip">
+  <span class="promise-mark">✳</span>
+  <p>Keep what works.<br><em>Love what you keep.</em></p>
+  <span class="promise-note">FEWER, BETTER THINGS.<br>THAT'S THE WHOLE IDEA.</span>
+</section>
+{% endblock %}

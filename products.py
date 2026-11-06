@@ -1,11 +1,14 @@
 import sqlite3
+from contextlib import closing
+
+from database import DATABASE_PATH
+
+
 def get_products():
-    con=sqlite3.connect("ecommerce.db")
-    cur=con.cursor()
-    cur.execute("SELECT * FROM products")
-    data=cur.fetchall()
-    con.close()
-    return data
+    with closing(sqlite3.connect(DATABASE_PATH)) as con:
+        return con.execute(
+            "SELECT id, name, price FROM products ORDER BY id"
+        ).fetchall()
 
 def show_products():
     print("Product Page Version 1")

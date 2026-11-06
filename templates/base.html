@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f2e9">
+  <title>{% block title %}Form & Function{% endblock %} · Form & Function</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="announcement">Thoughtful essentials for the way you live <span>·</span> Free delivery over ₹50,000</div>
+  <header class="site-header">
+    <a class="wordmark" href="{{ url_for('shop') if session.get('username') else url_for('login') }}" aria-label="Form and Function home">
+      <span class="wordmark-mark">f.</span>
+      <span>FORM <span class="wordmark-amp">&</span> FUNCTION<small>EVERYDAY, ELEVATED</small></span>
+    </a>
+    {% if session.get('username') %}
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="{{ url_for('shop') }}" class="{{ 'active' if request.endpoint == 'shop' else '' }}">Shop</a>
+      <a href="{{ url_for('cart') }}" class="bag-link {{ 'active' if request.endpoint == 'cart' else '' }}">Your bag <span class="bag-count">{{ cart_count }}</span></a>
+    </nav>
+    <div class="header-account">
+      <span class="welcome-label">Hello, {{ session['username'] }}</span>
+      <form method="post" action="{{ url_for('logout') }}"><button class="text-button" type="submit">Sign out</button></form>
+    </div>
+    {% endif %}
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-stack" role="status">
+      {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer class="site-footer">
+    <a class="footer-brand" href="{{ url_for('shop') if session.get('username') else url_for('login') }}">FORM <span>&</span> FUNCTION</a>
+    <span>Considered design. Better everyday.</span>
+    <span>© 2026 Form & Function</span>
+  </footer>
+</body>
+</html>

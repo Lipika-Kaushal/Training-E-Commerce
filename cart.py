@@ -1,39 +1,52 @@
-from products import get_products
-import numpy as np
 import sqlite3
+from contextlib import closing
+
+from database import DATABASE_PATH
+from products import get_products
+
+
 def shopping_cart(username):
-    cart={}
-    products=get_products()
+    products = {product[0]: product for product in get_products()}
+    cart = {}
     while True:
-        pid=int(input("Enter Product ID(0 to stop)"))
-        if pid==0:
-            break
-        qty=int(input("Enter Quantity:"))
-        if pid not in [p[0] for p in products] or qty<=0:
-            print("Inva;id product or quantity!")
+        try:
+            product_id = int(input("Enter Product ID (0 to stop): "))
+        except ValueError:
+            print("Please enter a valid product ID.")
             continue
-        cart[pid]=cart.get(pid,0)+qty
-    total=0
-    print("SHOPPING CART :")
+        if product_id == 0:
+            break
+        if product_id not in products:
+            print("Invalid product ID!")
+            continue
+        try:
+            quantity = int(input("Enter Quantity: "))
+        except ValueError:
+            print("Please enter a valid quantity.")
+            continue
+        if quantity <= 0:
+            print("Quantity must be greater than zero.")
+            continue
+        cart[product_id] = cart.get(product_id, 0) + quantity
 
-    con=sqlite3.connect("ecommerce.db")
-    cur=con.cursor()
+    total = 0
+    print("SHOPPING CART:")
+    with closing(sqlite3.connect(DATABASE_PATH)) as con:
+        with con:
+            for product_id, quantity in cart.items():
+                _, name, price = products[product_id]
+                amount = price * quantity
+                total += amount
+                print(
+                    f"{name}: Rs. {price} x {quantity} = Rs. {amount}"
+                )
+                con.execute(
+                    """
+                    INSERT INTO orders (username, product, quantity, total)
+                    VALUES (?, ?, ?, ?)
+                    """,
+                    (username, name, quantity, amount),
+                )
 
-    for pid,qty in cart.items():
-        for p in products:
-            if p[0]==pid:
-                name=p[1]
-                price=p[2]
-                amount=np.multiply(price,qty)
-                total=total+amount
-                print("PRODUCTS:")
-                print("PRICE:")
-                print("QUANTITY:")
-                print("FINAL PRICE:",price,"x",qty,"=",amount)
-
-                cur.execute("""
-                INSERT INTO orders VALUES(?,?,?,?)
-                """,(username,name,qty,amount))
-    con.commit()
-    con.close()
-
+    print(f"Cart total: Rs. {total}")
+    return total

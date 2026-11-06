@@ -1,14 +1,18 @@
 import sqlite3
+from contextlib import closing
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from database import DATABASE_PATH
+
+
 def analysis():
-    con=sqlite3.connect("ecommerce.db")
-    df=pd.read_sql_query(
-        "SELECT * FROOM orders",con
-    )
-    con.close()
+    with closing(sqlite3.connect(DATABASE_PATH)) as con:
+        df = pd.read_sql_query(
+            "SELECT username, product, quantity, total FROM orders", con
+        )
     print("Purchase Data")
     print(df)
 
